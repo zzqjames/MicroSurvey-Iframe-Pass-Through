@@ -14,6 +14,7 @@ export const StyledButton = styled.button`
     border-style: solid;
     font-weight:700;
     margin-right: ${(props) => props.right};
+    opacity: ${(props) => props.error};
 
     :hover {
         cursor:pointer;

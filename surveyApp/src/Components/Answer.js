@@ -1,7 +1,7 @@
 import { StyledMultipleAnswer } from "./MultipleOptions-style";
 import { StyledShortAnswer } from "./ShortText-style";
 
-const Answer = ( {className,type, options, qNum, arrayChangeFunction, answerArray} ) => {
+const Answer = ( {className, type, options, qNum, formik, updated, updater} ) => {
 
     const getDropdownOptions = (num) => {
         const array = []
@@ -13,30 +13,28 @@ const Answer = ( {className,type, options, qNum, arrayChangeFunction, answerArra
         return array
     }
 
-    function changeAnswerArray(answerArray, qNum, value) {
-        const newArray = [...answerArray]
-        newArray[qNum] = value
-        arrayChangeFunction(newArray)
-    }
-
     const getMultipleOptions = (num) => {
-        const optionsArray= new Array(num).fill("0");
+        let optionsArray = null
+        if (formik.values[qNum] === "") {optionsArray= new Array(num).fill("0");
+        } else {optionsArray = formik.values[qNum]}
         const array = []
         for(var i = 0; i < num; i++){
           let a = i;
           array.push(<div key={a}>
                 <input onChange={
-                    (event) => {
-                            if (event.target.checked) {
-                              optionsArray[a] = "1"
-                            } else {
-                              optionsArray[a] = "0"
+                            (event) => {
+                                    if (event.target.checked) {
+                                    optionsArray[a] = "1"
+                                    } else {
+                                    optionsArray[a] = "0"
+                                    }
+                                    formik.values[qNum] = optionsArray
+                                    updater(updated+1)
                             }
-                        changeAnswerArray(answerArray, qNum, optionsArray.join())
-                    }
-                }
-                type="checkbox"
-                id={a}
+                        }
+                        type="checkbox"
+                        id={a}
+                        defaultChecked={(optionsArray[a]==="1")}
                 />
                     <p>{options[a]}</p>
                 </div>
@@ -47,29 +45,32 @@ const Answer = ( {className,type, options, qNum, arrayChangeFunction, answerArra
 
     const findCorrectArea = (type) => {
         if (type === "LONG_ANSWER") {
-            return <textarea name="" id="" cols="30" rows="10" onChange={
-                (event) => {
-                    changeAnswerArray(answerArray, qNum, event.target.value)
-                }
-            }></textarea>
-        } else if (type === "MULTIPLE_SELECTION") {
+            return <textarea 
+                        name="" 
+                        id={qNum} 
+                        cols="30" rows="10" 
+                        onChange={formik.handleChange} 
+                        value={formik.values[qNum]}>
+                    </textarea>
+        } else if (type === "SINGLE_SELECTION") {
             const numberOptions = Object.keys(options).length
-            return <select name="" id="" onChange={
-                (event) => {
-                    changeAnswerArray(answerArray, qNum, event.target.value)
-                }
-            }>
+            return <select 
+                        name="" 
+                        id={qNum} 
+                        onChange={formik.handleChange}
+                        value={formik.values[qNum]}
+                    >
                 {getDropdownOptions(numberOptions)}
             </select>
         } else if (type === "SHORT_ANSWER") {
             return <StyledShortAnswer>
-                        <input type="text" onChange={
-                            (event) => {
-                                changeAnswerArray(answerArray, qNum, event.target.value)
-                            }
-                        }></input>
+                        <input type="text" 
+                            onChange={formik.handleChange}
+                            id = {qNum} 
+                            value={formik.values[qNum]}  
+                        ></input>
                     </StyledShortAnswer>
-        } else if (type === "SINGLE_SELECTION") {
+        } else if (type === "MULTIPLE_SELECTION") {
             const numberOptions = Object.keys(options).length
             return <StyledMultipleAnswer>
                 {getMultipleOptions(numberOptions)}

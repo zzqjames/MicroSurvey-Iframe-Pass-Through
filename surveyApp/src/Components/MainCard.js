@@ -1,10 +1,7 @@
-import useFetch from './useFetch.js';
 import ContentCard from './ContentCard.js';
 import { StyledLoading } from './Loader-style.js';
 
-const MainCard = ({className, url, userID}) => {
-    const {data, isLoading, numberQuestions, surveyID} = useFetch(url, userID)
-    console.log('MainCard: ', userID, numberQuestions, surveyID)
+const MainCard = ({className, isLoading, data, numberQuestions, userId, surveyId, restartFunction}) => {
 
     return ( 
         <div className={className}>
@@ -13,10 +10,9 @@ const MainCard = ({className, url, userID}) => {
             <span>
                 {isLoading && <StyledLoading></StyledLoading>}
             </span>
-
-            {true && <ContentCard data={data} numberQuestions={numberQuestions} userID={userID} surveyID={surveyID}></ContentCard>}
+            {!isLoading && <ContentCard data={data} numberQuestions={numberQuestions} userId={userId} surveyId={surveyId} restartFunction={restartFunction}></ContentCard>}
         </div>
      );
 }
- 
+
 export default MainCard;

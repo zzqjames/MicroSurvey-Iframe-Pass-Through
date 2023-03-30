@@ -1,61 +1,58 @@
 import axios from 'axios';
 
-import {GetSurveyForUserRequest, GetSurveyForUserResponse, Question, SaveResponseRequest, SaveResponseResponse} from './sba-survey-api-def';
+const endpoint = "https://api-dev.corp.getcentro.com/graphql";
 
-const serverUrl = "https://survey-api-dev.corp.getcentro.com/jsonrpc";
-
-// Basically the input (request) format of calling all our API functions
-interface JsonRpcRequest<ReqT> {
-    jsonrpc: string;
-    method: string;
-    params: ReqT;
-    id: number;
-  }
-  
-// The output format
-interface JsonRpcResponse<ResT> {
-    jsonrpc: string;
-    id: number;
-    result: ResT;
-    error?: {
-      code: number;
-      message: string;
-      data?: any;
-    };
-  }
-
-
-export async function getQuestions(userID: string): Promise<{surveyId: string | null, questions: Array<Question> | null}> {
-  const request: JsonRpcRequest<GetSurveyForUserRequest> = {
-    jsonrpc: '2.0',
-    method: 'getSurveyForUserHandler', // This is the name of the function you want to use in the API
-    params: {'userId': userID}, // This is the input to the function, has to match the type getSurveyForUserRequest
-    id: 1,
-  };
-  const response = await axios.post<JsonRpcResponse<GetSurveyForUserResponse>>(serverUrl, request);
-
-  if (response.data.error){
-    console.log(response.data.error.message);
-    return {surveyId: null, questions: null};
-  } else {
-    return {surveyId: response.data.result.surveyId, questions: response.data.result.questions};
-  }
+export enum QuestionType {
+  SINGLE_SELECTION = 'SINGLE_SELECTION',
+  MULTIPLE_SELECTION = 'MULTIPLE_SELECTION',
+  SHORT_ANSWER = 'SHORT_ANSWER',
+  LONG_ANSWER = 'LONG_ANSWER',
 }
 
+export type Question = {
+  questionType: QuestionType;
+  questionTitle: string;
+  selections: Array<string>;
+  isRequired: boolean;
+};
 
-export async function saveQuestions(surveyID:string, userID:string, answers:Array<string>): Promise<String> {
-  const request: JsonRpcRequest<SaveResponseRequest> = {
-      jsonrpc: '2.0',
-      method: 'saveResponseHandler', 
-      params: {'surveyId': surveyID, 'userId': userID, 'answers': answers}, 
-      id: 1,
-    };
-  const response = await axios.post<JsonRpcResponse<SaveResponseResponse>>(serverUrl, request);
+export async function getSurvey(userId: string): Promise<{surveyId: string | null, questions: Array<Question> | null}> {
+  const query = `
+    {
+      getSurvey(params: {userId: "${userId}"}) {
+        surveyId
+        questions {
+          questionType
+          questionTitle
+          selections
+          isRequired
+        }
+      }
+    }
+  `;
+  const variables = {};
+  const response = await axios.post(
+    endpoint,
+    { query, variables }
+  );
+  const surveyId: string = response.data.data.getSurvey.surveyId;
+  const questions: Array<Question> = response.data.data.getSurvey.questions;
+  return { surveyId: surveyId, questions: questions} ;
+}
 
-  if (response.data.error){
-    console.log(response.data.error.message);
-    return "Error";
-  } else {
-    return response.data.result.message;
-  }
+export async function saveResponse(surveyId: string, userId: string, answers: Array<string>): Promise<string> {
+  const query = `
+    mutation {
+      saveSurveyResponse(params: {surveyId: "${surveyId}", userId: "${userId}", answers: ${JSON.stringify(answers)}}) {
+        message
+      }
+    }
+  `;
+  const variables = {};
+  const response = await axios.post(
+    endpoint,
+    { query, variables }
+  );
+  const message: string = response.data.data.saveSurveyResponse.message;
+  return message;
 }
