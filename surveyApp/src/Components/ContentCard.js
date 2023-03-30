@@ -1,20 +1,63 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { StyledAnswer } from './Answer-style';
 import { StyledButton } from './Button-style'
 import { StyledProgressButtonHolder } from './ProgressButtonHolder-style'
 import { StyledInnerCard } from './InnerCard-style'
 import { StyledContainer } from './Container-style'
 import { StyledButtonHolder } from './ButtonHolder-style.js'
-import { saveQuestions } from '../integration.ts'
+import { saveResponse } from '../integration.ts'
+import * as Yup from 'yup'
+import { useFormik } from 'formik'
 
-const ContentCard = ({data, numberQuestions, userID, surveyID}) => {
-    console.log('ContentCard: ', data, numberQuestions, userID, surveyID)
-
-    const [answerArray, setAnswerArray] = useState(new Array(numberQuestions).fill(null));
+const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction}) => {
     const [currentQuestion, setCurrentQuestion] = useState(0)
+    const [allRequiredAnswered, setAllRequiredAnswered] = useState(false)
+    const [error, setError] = useState(false)
+    const [updated, setUpdated] = useState(0)
+    const validationDict = {
+        "SHORT_ANSWER" : Yup.string()
+            .max(50, "Must be 50 characters of less."),
+        "LONG_ANSWER" : Yup.string()
+            .max(1000, "Must be 10000 characters of less."),
+    }
 
-    function fillArray(newArray) {
-        setAnswerArray(newArray);
+    let valueDict = {}
+    for (let i = 0; i<numberQuestions; i++) {valueDict[i] = ""}
+
+    let schema = {}
+    for (let i = 0; i < numberQuestions; i++) {schema[i] = validationDict[data[i].questionType]}
+
+    const formik = useFormik({
+        initialValues : valueDict,
+        validationSchema : Yup.object().shape(schema),
+    })
+
+    useEffect(() => {
+        let bool = false;
+        let err = false;
+        let answers = formik.values
+        if (Object.values(answers).length>0) {bool = true;}
+        for (let i = 0; i < Object.values(answers).length; i++) {
+            if ((Object.values(answers)[i] === "") && (data[i].isRequired)) {
+                bool = false
+            }
+            err = err || (formik.errors[currentQuestion] ? true : false)
+        }
+        setAllRequiredAnswered(bool)
+        setError(err)
+    }, [formik.values, data, updated])
+
+    const handleSubmit = (formik, restartFunction) => {
+        let answers = Object.values(formik.values)
+        for (let i = 0; i < answers.length; i++) {
+            if (typeof answers[i] == "object") {
+                answers[i] = answers[i].join("")
+            }
+        }
+        console.log("submitted")
+        saveResponse(surveyId, userId, answers)
+        surveyId = null
+        restartFunction(true)
     }
 
     const getButtonsUsingForLoop = (numberQuestions) => {
@@ -27,28 +70,30 @@ const ContentCard = ({data, numberQuestions, userID, surveyID}) => {
                     setCurrentQuestion(a);
                 }}
                 key={i}
+                error = {formik.errors[a] ? 0.5 : 1}
                 >Q{i+1}
             </StyledButton>)
         }
         return array
     }
 
-    console.log('surveyID is ', surveyID)
     return (
         <div>
-            {!surveyID ? (
+            {!surveyId ? (
                 <StyledContainer>
                     <p>You have no incomplete surveys!</p>
                 </StyledContainer>
             
             ) : (
-            <>      <StyledContainer>
+            <>
+                    <StyledContainer>
                         <StyledInnerCard width={"100%"} maxwidth={"80px"} height={"100%"} justify={"center"}>
                             {getButtonsUsingForLoop(numberQuestions)}
                         </StyledInnerCard>
                         <StyledInnerCard height="fit-content">
                             <h2 id='question-text'>{data[currentQuestion].questionTitle}</h2>
-                            <StyledAnswer type={data[currentQuestion].questionType} options={data[currentQuestion].selections} qNum={currentQuestion} arrayChangeFunction={fillArray} answerArray={answerArray}></StyledAnswer>
+                            <StyledAnswer type={data[currentQuestion].questionType} options={data[currentQuestion].selections} qNum={currentQuestion} formik = {formik} updated = {updated} updater = {setUpdated}></StyledAnswer>
+                            {formik.errors[currentQuestion] ? <p>{formik.errors[currentQuestion]}</p> : null}
                             <StyledProgressButtonHolder>
                                 <StyledButton right={"9px"} width={"80px"}
                                     onClick={() => {
@@ -64,16 +109,17 @@ const ContentCard = ({data, numberQuestions, userID, surveyID}) => {
                         </StyledInnerCard>
                     </StyledContainer>
                     <StyledButtonHolder>
-                            <button onClick={() => {
-                                console.log(answerArray);
-                                saveQuestions(surveyID, userID, answerArray);
-                                surveyID = null;
+                        {allRequiredAnswered && !error &&
+                            <button type="submit" onClick={() => {
+                                handleSubmit(formik, restartFunction)
                             } }>Submit</button>
-                    </StyledButtonHolder></>
+                        }  
+                    </StyledButtonHolder>
+            </>
             )}
         </div>
         
      );
 }
- 
+
 export default ContentCard;
