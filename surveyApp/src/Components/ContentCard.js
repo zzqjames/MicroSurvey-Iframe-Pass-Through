@@ -45,7 +45,7 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
         }
         setAllRequiredAnswered(bool)
         setError(err)
-    }, [formik.values, data, updated])
+    }, [formik.values, data, updated,currentQuestion,formik.errors])
 
     const handleSubmit = (formik, restartFunction) => {
         let answers = Object.values(formik.values)
@@ -87,7 +87,7 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
             ) : (
             <>
                     <StyledContainer>
-                        <StyledInnerCard width={"100%"} maxwidth={"80px"} height={"100%"} justify={"center"}>
+                        <StyledInnerCard width={"100%"} maxwidth={"80px"} height={"fit-content"} justify={"center"}>
                             {getButtonsUsingForLoop(numberQuestions)}
                         </StyledInnerCard>
                         <StyledInnerCard height="fit-content">
@@ -106,15 +106,17 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
                                     } }
                                 >Next</StyledButton>
                             </StyledProgressButtonHolder>
-                        </StyledInnerCard>
-                    </StyledContainer>
-                    <StyledButtonHolder>
+                            <StyledButtonHolder>
                         {allRequiredAnswered && !error &&
                             <button type="submit" onClick={() => {
                                 handleSubmit(formik, restartFunction)
                             } }>Submit</button>
                         }  
                     </StyledButtonHolder>
+                        </StyledInnerCard>  
+                                          
+                    </StyledContainer>
+                                     
             </>
             )}
         </div>

@@ -3,8 +3,8 @@ import styled from 'styled-components';
 export const StyledButtonHolder = styled.div`
     display: flex;
     flex-direction: column;
-    
     > button {
+        
         margin-bottom: 12px;
         width: 30%;
         height: 35px;

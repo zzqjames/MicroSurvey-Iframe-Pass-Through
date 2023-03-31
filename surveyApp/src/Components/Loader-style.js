@@ -4,8 +4,8 @@ export const StyledLoading = styled.div`
     border: 16px solid #f3f3f3;
     border-radius: 50%;
     border-top: 16px solid #f084a5c8;
-    width: 120px;
-    height: 120px;
+    width: 442px;
+    height: 442px;
     align-self: center;
 
     -webkit-animation: spin 2s linear infinite; /* Safari */
