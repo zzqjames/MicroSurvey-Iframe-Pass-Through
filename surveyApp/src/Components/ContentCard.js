@@ -16,9 +16,9 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
     const [updated, setUpdated] = useState(0)
     const validationDict = {
         "SHORT_ANSWER" : Yup.string()
-            .max(50, "Must be 50 characters of less."),
+            .max(50, "Must be 50 characters or less."),
         "LONG_ANSWER" : Yup.string()
-            .max(1000, "Must be 10000 characters of less."),
+            .max(1000, "Must be 10000 characters or less."),
     }
 
     let valueDict = {}
@@ -32,6 +32,10 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
         validationSchema : Yup.object().shape(schema),
     })
 
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+    
     useEffect(() => {
         let bool = false;
         let err = false;
@@ -46,6 +50,8 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
         setAllRequiredAnswered(bool)
         setError(err)
     }, [formik.values, data, updated,currentQuestion,formik.errors])
+
+
 
     const handleSubmit = (formik, restartFunction) => {
         let answers = Object.values(formik.values)
@@ -107,12 +113,12 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
                                 >Next</StyledButton>
                             </StyledProgressButtonHolder>
                             <StyledButtonHolder>
-                        {allRequiredAnswered && !error &&
-                            <button type="submit" onClick={() => {
-                                handleSubmit(formik, restartFunction)
-                            } }>Submit</button>
-                        }  
-                    </StyledButtonHolder>
+                                {allRequiredAnswered && !error && isEmpty(formik.errors) &&
+                                    <button type="submit" onClick={() => {
+                                        handleSubmit(formik, restartFunction)
+                                    } }>Submit</button>
+                                }  
+                            </StyledButtonHolder>
                         </StyledInnerCard>  
                                           
                     </StyledContainer>
