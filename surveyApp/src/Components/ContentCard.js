@@ -86,10 +86,7 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
     return (
         <div>
             {!surveyId ? (
-                <StyledContainer>
-                    <p>You have no incomplete surveys!</p>
-                </StyledContainer>
-            
+                <p><center>You have no incomplete surveys!</center></p>
             ) : (
             <>
                     <StyledContainer>
@@ -97,7 +94,7 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
                             {getButtonsUsingForLoop(numberQuestions)}
                         </StyledInnerCard>
                         <StyledInnerCard height="fit-content">
-                            <h2 id='question-text'>{data[currentQuestion].questionTitle}</h2>
+                            <h2 id='question-text'>{String(currentQuestion + 1) + '. ' + data[currentQuestion].questionTitle}</h2>
                             <StyledAnswer type={data[currentQuestion].questionType} options={data[currentQuestion].selections} qNum={currentQuestion} formik = {formik} updated = {updated} updater = {setUpdated}></StyledAnswer>
                             {formik.errors[currentQuestion] ? <p>{formik.errors[currentQuestion]}</p> : null}
                             <StyledProgressButtonHolder>
@@ -114,9 +111,10 @@ const ContentCard = ({data, numberQuestions, userId, surveyId, restartFunction})
                             </StyledProgressButtonHolder>
                             <StyledButtonHolder>
                                 {allRequiredAnswered && !error && isEmpty(formik.errors) &&
-                                    <button type="submit" onClick={() => {
+                                    <StyledButton right={"9px"} width={"80px"}
+                                    onClick={() => {
                                         handleSubmit(formik, restartFunction)
-                                    } }>Submit</button>
+                                    } }>Submit</StyledButton>
                                 }  
                             </StyledButtonHolder>
                         </StyledInnerCard>  

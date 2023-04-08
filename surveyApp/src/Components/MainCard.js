@@ -5,8 +5,7 @@ const MainCard = ({className, isLoading, data, numberQuestions, userId, surveyId
 
     return ( 
         <div className={className}>
-            {!isLoading && <h1>MicroSurvey</h1>}
-            {!isLoading && <p>Details about the survey (optional)</p>}
+            {!isLoading && <h1><center>MicroSurvey</center></h1>}
             <span>
                 {isLoading && <StyledLoading></StyledLoading>}
             </span>
