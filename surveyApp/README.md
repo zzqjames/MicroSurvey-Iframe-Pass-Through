@@ -1,70 +1,112 @@
-# Getting Started with Create React App
+## User Instructions
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### For developers (create a survey and assign survey to users):
+1. Open up Postman, go to your workspace, open any collection or create a new collection, and create a new request.
+2. Switch to POST and enter https://survey-api-dev.corp.getcentro.com/jsonrpc as the URL of the API server.
+3. In the "Headers" tab, add the following key-value pair:
+      - Content-Type: application/json
+4. In the "Body" tab, select the "raw" option and make sure the request format is "JSON".
+5. Enter the JSON-RPC request object in the request body and click the "Send" button to make the API request:
+      - Here is an example for creating a survey:
+          ```
+          {
+            "jsonrpc": "2.0",
+            "method": "createSurveyHandler",
+            "params": {"questions": [{
+                          "questionType": "SHORT_ANSWER", 
+                          "questionTitle": "Q1 short answer", 
+                          "selections": [],
+                          "required": true
+                          }, {
+                          "questionType": "SINGLE_SELECTION", 
+                          "questionTitle": "Q2 single selection", 
+                          "selections": ['A', 'B'],
+                          "required": true
+                          }
+                  ]},
+            "id": 1
+          }
+          ```
+        The response will be something like this:
+          ```
+          {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": {
+                  "surveyId": "survey_0ClrwpjUi5ZsD47-NaSFW"
+              }
+          }
+          ```
+      - Here is an example for assigning this survey to a 2 groups of users, a group of 2 and a group of 1:
+          ```
+          {
+            "jsonrpc": "2.0",
+            "method": "assignSurveyToUsersHandler",
+            "params": {"surveyId": "survey_0ClrwpjUi5ZsD47", "users": [["user_1234", "user_5678"], ['user_abcd']]},
+            "id": 1
+          }
+          ```
+        The response will be something like this:
+          ```
+          {
+          "jsonrpc": "2.0",
+              "id": 1,
+              "result": {
+                  "message": "Success"
+              }
+          }
+          ```
 
-## Available Scripts
+### For users (take a survey and submit a survey):
 
-In the project directory, you can run:
+1. The user should click on the URL link to the iframe holder, which acts as our partner's existing application: https://zzqjames.github.io/survey-holder/
+2. The user will be directed to a landing page with several user IDs, such as user 1, user 2, and user 3.
+4. The user needs to click on the user ID that corresponds to him/her. 
+5. He/she will be directed to the survey page, where the user can see a set of questions. There are different question types in the survey, the user can answer the questions based on his/her preferences by filling in the questions or selecting the appropriate options. 
+6. The survey will start with the first question (Q1) and proceed to subsequent questions using the navigation bar. For example, the user can press the Next and the Previous buttons to move between the questions. As well, the user can use Q1 and Q2 navigation bars to jump directly to specific questions.
+7. Once the user has completed his/her survey, he/she can press on submit button to submit their answer for professionals to review and analyze.
 
-### `npm start`
+## Development requirements
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Survey app development
+* Clone the MicroSurvey and and IframeHolder repositories. Make sure you place them in the same directory:
+```
+git clone https://github.com/zzqjames/csc301-frontend-shared-repo.git microSurvey
+```
+* Install Node.js/NPM here https://nodejs.org/en/
+* Open MicroSurvey using text editor VScode and install the node modules:
+```
+cd microSurvey/surveyApp
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+npm install --save-dev @nrwl/workspace
+```
+* Run the react application:
+```
+npm start
+```
+* Go to iframeHolder and open <survey-website.html> in browser
 
-### `npm test`
+### Back-end API development
+* Clone the CheaprEats repository:
+```
+git clone https://github.com/cheapreats/ce ce
+```
+* Install Nx globally and install node modules:
+```
+cd ce
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+sudo npm install -g nx
 
-### `npm run build`
+npm install https://github.com/cheapreats/ce
+```
+* Set the URL of the MongoDB database that you are going to use in the .env file of the sba-survey-api package
+```
+cd packages/sba-survey-api
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+vi .env
+```
+* Run the JSON-RPC API server:
+```
+nx serve sba-survey-api
+```
+For GraphQL development, follow the exact same flow but go to the sba-api package.
