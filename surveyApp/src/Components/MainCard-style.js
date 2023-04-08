@@ -2,9 +2,9 @@ import MainCard from './MainCard';
 import styled from 'styled-components';
 
 export const StyledMainCard = styled(MainCard)`
-    background-color: #f084a5c8;
+    background-color: #B5DAFA;
     border-width: 3px;
-    color: white;
+    color: black;
 
     > h1 {
     font-size: 40px;

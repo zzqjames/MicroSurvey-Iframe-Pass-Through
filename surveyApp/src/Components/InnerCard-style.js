@@ -4,7 +4,7 @@ export const StyledInnerCard = styled.div`
     display: flex;
     flex-direction: column;
     border-radius: 8px;
-    background-color: #C35252;
+    background-color: #CEE9FF;
     width: ${(props) => props.width};
     max-width: ${(props) => props.maxwidth};
     height: ${(props) => props.height};
@@ -16,7 +16,7 @@ export const StyledInnerCard = styled.div`
         margin-top: 16px;
         font-size: 24px;
         font-weight: 600;
-        color: white;
+        color: black;
         font-family: "Quicksand";
     }
 

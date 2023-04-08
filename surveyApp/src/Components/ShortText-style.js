@@ -6,7 +6,7 @@ export const StyledShortAnswer = styled.div`
     input {
         height: 43px;
         border-radius: 6px;
-        background-color: rgb(247, 233, 206);
+        background-color: #E5F3FF;
         border: 0;
         width: 100%;
     }

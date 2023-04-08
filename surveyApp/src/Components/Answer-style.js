@@ -14,14 +14,14 @@ export const StyledAnswer = styled(Answer)`
     > textarea {
         width: 80%;
         border-radius: 6px;
-        background-color: rgb(247, 233, 206);
+        background-color: #E5F3FF;
         border: 0;
     }
 
     > select {
         width: 80%;
         border-radius: 6px;
-        background-color: rgb(247, 233, 206);
+        background-color: #E5F3FF;
         border: 0;
         height: 45px;
     }  

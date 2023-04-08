@@ -10,7 +10,7 @@ export const StyledMultipleAnswer = styled.div`
     * {
     margin-bottom: 10px;
     border-radius: 6px;
-    background-color: rgb(247, 233, 206);
+    background-color: #E5F3FF;
     display: flex;
     flex-direction: row;
     }
