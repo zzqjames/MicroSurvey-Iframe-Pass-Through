@@ -5,7 +5,7 @@ export const StyledButton = styled.button`
     margin-bottom: 12px;
     width: ${(props) => props.width};;
     height: 30px;
-    background-color: rgba(195, 82, 82, 0.888);
+    background-color: #3CA4FF;
     border: 3;
     border-radius: 8px;
     align-self: center;
@@ -19,7 +19,7 @@ export const StyledButton = styled.button`
     :hover {
         cursor:pointer;
         background-color: white;
-        color: rgba(195, 82, 82, 0.888);
+        color: #3CA4FF;
     }
     
 `

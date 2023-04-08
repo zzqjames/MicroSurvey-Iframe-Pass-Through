@@ -11,7 +11,7 @@ export const StyledButtonHolder = styled.div`
         max-width: 90px;
         border-radius: 8px;
         border-style: solid;
-        background-color: white;
+        background-color: #3CA4FF;
         border-color: rgba(195, 82, 82, 0.888);
         align-self: center;
         font-weight: 700;
