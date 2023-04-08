@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const StyledLoading = styled.div`
     border: 16px solid #f3f3f3;
     border-radius: 50%;
-    border-top: 16px solid #f084a5c8;
+    border-top: 16px solid #0C75D1;
     width: 442px;
     height: 442px;
     align-self: center;
