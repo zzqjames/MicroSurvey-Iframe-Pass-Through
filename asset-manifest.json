@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/MicroSurvey-Iframe-Pass-Through/static/css/main.5e92225f.css",
+    "main.js": "/MicroSurvey-Iframe-Pass-Through/static/js/main.bb59efc0.js",
+    "index.html": "/MicroSurvey-Iframe-Pass-Through/index.html",
+    "main.5e92225f.css.map": "/MicroSurvey-Iframe-Pass-Through/static/css/main.5e92225f.css.map",
+    "main.bb59efc0.js.map": "/MicroSurvey-Iframe-Pass-Through/static/js/main.bb59efc0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5e92225f.css",
+    "static/js/main.bb59efc0.js"
+  ]
+}
