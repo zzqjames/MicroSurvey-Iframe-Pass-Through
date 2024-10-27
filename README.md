@@ -160,7 +160,7 @@ For GraphQL development, follow the exact same flow but go to the sba-api packag
     1. Implement more question types. Multiple choice (dropdown menu), slider, short answer question.
     2. Implement user input validation. I.e. verify user answer before send to backend API.
     3. Refine the style of the HTML interface.
-3. Create a repository for the deployment of survey app [https://github.com/zzqjames/csc301-project](https://github.com/zzqjames/MicroSurvey-Iframe-Pass-Through/), and copy the code from the corresponding code from the frontend repository. Then, deploy the survey app and then get the link which can access survey app [https://zzqjames.github.io/csc301-project/](https://zzqjames.github.io/MicroSurvey-Iframe-Pass-Through).
+3. Create a repository for the deployment of survey app [https://github.com/zzqjames/MicroSurvey-Iframe-Pass-Through/](https://github.com/zzqjames/MicroSurvey-Iframe-Pass-Through/), and copy the code from the corresponding code from the frontend repository. Then, deploy the survey app and then get the link which can access survey app [https://zzqjames.github.io/MicroSurvey-Iframe-Pass-Through](https://zzqjames.github.io/MicroSurvey-Iframe-Pass-Through).
 
 * Back-end workflow & deployment:
 1. Create a new branch on the Cheapreats repo: https://github.com/cheapreats/ce.
